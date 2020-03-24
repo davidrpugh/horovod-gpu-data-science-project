@@ -1,23 +1,32 @@
 name: null
 
 channels:
+  - pytorch
   - conda-forge
   - defaults
 
 dependencies:
   - bokeh=1.4
-  - cudatoolkit=10.1
+  - cudnn=7.6
   - cupti=10.1
+  - cxx-compiler=1.0
   - hvplot=0.5
   - ipython-sql=0.3
   - jupyterlab=1.2
   - jupyterlab-git=0.9
   - matplotlib=3.2
+  - mpi4py=3.0 # installs cuda-aware openmpi
   - nbdime=1.1
+  - nccl=2.5
   - nodejs=13
+  - nvcc_linux-64=10.1
   - pandas=1.0
   - pip=20.0
   - pip:
+    - mxnet-cu101mkl==1.6.* # makes sure installed prior to horovod
     - -r file:requirements.txt
   - python=3.7
-  
+  - pytorch=1.4
+  - tensorboard=2.1
+  - tensorflow-gpu=2.1
+  - torchvision=0.5  
