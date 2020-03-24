@@ -1,0 +1,3 @@
+jupyterlab-nvdashboard==0.2.* # server-side component; client-side component installed in postBuild
+jupyterlab_sql==0.3.*
+
