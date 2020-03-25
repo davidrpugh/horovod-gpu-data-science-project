@@ -205,7 +205,11 @@ Finally, we submit the job to Ibex using the `sbatch` command.
 USER_EMAIL=your.name@kaust.edu.sa # don't forget to change this!
 JOB_NAME=horovod-single-node-benchmark
 mkdir ../results/$JOB_NAME
-TRAINING_SCRIPT=../src/horovod-example/train.py
+TRAINING_SCRIPT=../src/pytorch-examples/imagenet/train.py
 DATA_DIR=/local/reference/CV/ILSVR/classification-localization/data/jpeg
-sbatch --job-name $JOB_NAME --mail-user $USER_EMAIL --mail-type=ALL --export TRAINING_SCRIPT=$TRAINING_SCRIPT,DATA_DIR=$DATA_DIR horovod-single-node-job.sh
+sbatch --job-name $JOB_NAME \
+       --mail-user $USER_EMAIL \
+       --mail-type=ALL \
+       --export TRAINING_SCRIPT=$TRAINING_SCRIPT,DATA_DIR=$DATA_DIR \
+       horovod-single-node-job.sbatch
 ```
