@@ -1,6 +1,6 @@
 #!/bin/bash --login
 #SBATCH --nodes=1
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --mem=0
 #SBATCH --ntasks=8
 #SBATCH --tasks-per-node=8
@@ -10,6 +10,9 @@
 #SBATCH --partition=batch
 #SBATCH --output=../results/%x/slurm-%j.out
 #SBATCH --error=../results/%x/slurm-%j.err
+
+# Stops execution of script if any step return non-zro exit code
+set -e
 
 # Need to define persistent storage for logging... 
 PERSISTENT_LOGGING_DIR=../results/$SLURM_JOB_NAME/logs
@@ -28,6 +31,7 @@ mkdir -p $LOCAL_CHECKPOINTS_DIR
 mkdir -p $LOCAL_TENSORBOARD_DIR
 
 # Load software stack
+module purge
 module load cuda/10.1.243
 conda activate ../env
 

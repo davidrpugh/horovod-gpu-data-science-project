@@ -100,13 +100,14 @@ rsync -a $LOCAL_TENSORBOARD_DIR/ $PERSISTENT_TENSORBOARD_DIR
 #### Loading the software application stack
 
 It is always good practice to explicitly load the software application stack inside the job script.
-First we load the appropriate Cuda Toolkit module for the version of PyTorch we are using. Then we 
-activate the Conda environment containing all the other software dependencies in such as NCCL, CUDNN, 
-OpenMPI, and Horovod.
+First we load the appropriate Cuda Toolkit module for the version of PyTorch, TensorFlow, and MXNET. 
+Then we activate the Conda environment containing all the other software dependencies in such as NCCL,
+ CUDNN, OpenMPI, and Horovod.
 
 ```bash
 ...
 # Load software stack
+module purge
 module load cuda/10.1.243
 conda activate ../env
 ...
@@ -138,7 +139,7 @@ nvidia-smi dmon --delay $NVIDIA_SMI_DELAY_SECONDS --options DT >> $PERSISTENT_LO
 NVIDIA_SMI_PID=$!
 
 # start the nvdashboard server in the background
-NVDASHBOARD_PORT=8889
+NVDASHBOARD_PORT=8000
 python -m jupyterlab_nvdashboard.server $NVDASHBOARD_PORT &
 NVDASHBOARD_PID=$!
 
@@ -146,6 +147,27 @@ NVDASHBOARD_PID=$!
 # kill off the GPU monitoring processes
 kill $NVIDIA_SMI_PID $NVDASHBOARD_PID
 ...
+```
+
+### Tensorboard Monitoring
+
+Tensorboard is the standard tool for monitoring convergence of deep learning metrics. This job script 
+starts the Tensorboard server as a background process prior to launching your training job; the server 
+is accessible from a web browser at the following URL
+```
+$IBEX_NODE_NAME.ibex.kaust.edu.sa:$NVDASHBOARD_PORT
+```
+where `$IBEX_NODE_NAME` is the name of the node on Ibex where your job is running.
+
+```bash
+# Start the TensorBoard server running in the background
+TENSORBOARD_PORT=6006
+tensorboard --logdir $LOCAL_TENSORBOARD_DIR --port $TENSORBOARD_PORT --bind_all &
+TENSORBOARD_PID=$!
+
+...
+# kill off the Tensorboard server
+kill $TENSORBOARD_PID
 ```
 
 #### Running the training job
@@ -180,10 +202,10 @@ be reused for arbitrary training jobs (at least those that following the workflo
 Finally, we submit the job to Ibex using the `sbatch` command.
  
 ```bash
-$ USER_EMAIL=your.name@kaust.edu.sa # don't forget to change this!
-$ JOB_NAME=horovod-single-node-benchmark
-$ mkdir ../results/$JOB_NAME
-$ TRAINING_SCRIPT=../src/horovod-example/train.py
-$ DATA_DIR=/local/reference/CV/ILSVR/classification-localization/data/jpeg
-$ sbatch --job-name $JOB_NAME --mail-user $USER_EMAIL --mail-type=ALL --export TRAINING_SCRIPT=$TRAINING_SCRIPT,DATA_DIR=$DATA_DIR horovod-single-node-job.sh
+USER_EMAIL=your.name@kaust.edu.sa # don't forget to change this!
+JOB_NAME=horovod-single-node-benchmark
+mkdir ../results/$JOB_NAME
+TRAINING_SCRIPT=../src/horovod-example/train.py
+DATA_DIR=/local/reference/CV/ILSVR/classification-localization/data/jpeg
+sbatch --job-name $JOB_NAME --mail-user $USER_EMAIL --mail-type=ALL --export TRAINING_SCRIPT=$TRAINING_SCRIPT,DATA_DIR=$DATA_DIR horovod-single-node-job.sh
 ```
