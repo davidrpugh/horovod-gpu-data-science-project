@@ -1,11 +1,11 @@
 #!/bin/bash --login
-#SBATCH --nodes=1
 #SBATCH --time=24:00:00
-#SBATCH --mem=0
-#SBATCH --ntasks=8
+#SBATCH --gpus=8
 #SBATCH --tasks-per-node=8
-#SBATCH --cpus-per-task=6
-#SBATCH --gres=gpu:v100:8
+#SBATCH --gpus-per-task=1
+#SBATCH --cpus-per-gpu=6
+#SBATCH --mem-per-gpu=90G
+#SBATCH --constraint=v100
 #SBATCH --constraint=cpu_intel_platinum_8260
 #SBATCH --partition=batch
 #SBATCH --output=../results/%x/slurm-%j.out
@@ -51,6 +51,7 @@ tensorboard --logdir $LOCAL_TENSORBOARD_DIR --port $TENSORBOARD_PORT --bind_all 
 TENSORBOARD_PID=$!
 
 # start the training process in the background
+export NCCL_DEBUG=INFO
 horovodrun -np $SLURM_NTASKS python $TRAINING_SCRIPT \
     --data-dir $DATA_DIR \
     --read-checkpoints-from $PERSISTENT_CHECKPOINTS_DIR \

@@ -7,23 +7,26 @@ The `horovod-single-node-job.sh` job script can be broken down into a number of 
 #### Slurm directives
 
 When runnning a distributed training job with Horovod you will want to set the total number of 
-tasks (`--ntasks`) equal to the total number of GPUs requested across all nodes and set the 
-number of tasks per node (`--tasks-per-node`) equal to the number of NVIDIA V100 GPUs requested 
-per node (`--gres=gpu:v100`). In the directives below we are requesting all 8 32 GB NVIDIA 
-V100 GPUs available on a single node so we need to set `--nodes=1`, `--ntasks=8`, 
-`--tasks-per-node=8` and `--gres=gpu:v100:8`.
+GPUs (`--gpus`) equal to the total number of GPUs requested across all nodes. If you wish to 
+only use NVIDIA V100 GPUs, then you can add `--constraint=v100`. Next, set the number of GPUs 
+per task (`--gpus-per-task`) to be 1 and then set the number of tasks per node 
+(`--tasks-per-node`) to pin down the the number of GPUs requested per node. In the directives 
+below we are requesting all 8 32 GB NVIDIA V100 GPUs available on a single node so we need to 
+`--gpus=8`, `--constraint=v100`, and `--tasks-per-node=8`.
 
 In order to achieve top training performance, you need to request sufficient CPUs to feed the 
 training data to the GPUs. A good rule of thumb is to request 5-6 CPUs per 32 GB NVIDIA V100 GPU.
-To achieve this we set `--cpus-per-task=6` (given that `--tasks-per-node=8` this means we have 
+To achieve this we set `--cpus-per-gpus=6` (given that `--tasks-per-node=8` this means we have 
 requested all 48 CPUs on the node). We also provide a constraing on the type of CPU requested: 
 `--constraint=cput_intel_platinum_8260` insures that all nodes have Intel "Cascade Lake" CPUs.
 
 Finally, we also need to request sufficient CPU memory. A good rule of thumb is to request at 
 least twice the CPU memory as available GPU memory. Since we have requested 8 x 32 GB = 256 GB 
-of GPU memory we should request at least 512 GB of CPU memory. However, given that we are 
-already requesting all of the GPUs and all of the CPUs on the node we might as well ask for all 
-available memory on the node by setting `--mem=0`. 
+of GPU memory we should request at least 512 GB of CPU memory. Best way to accomplish this is 
+to specify the amount of memory per GPU `--mem-per-gpu`. This value should be set to at least 
+64G and as high as 90G. Alternaatively, given that we are already requesting all of the GPUs 
+and all of the CPUs on the node you can ask for all available memory on the node by setting 
+`--mem=0`. 
 
 Finally, we direct out the slurm output and error logs to files in particular directories. Note 
 that `%x` refers to the Slurm job name (which we specify!) and `%j` refers to the Slurm job id 
@@ -33,13 +36,13 @@ naming convention helps to keep our results directories neat and tidy.
 
 ```bash
 #!/bin/bash --login
-#SBATCH --nodes=1
 #SBATCH --time=24:00:00
-#SBATCH --mem=0
-#SBATCH --ntasks=8
+#SBATCH --gpus=8
+#SBATCH --constraint=v100
+#SBATCH --gpus-per-task=1
 #SBATCH --tasks-per-node=8
-#SBATCH --cpus-per-task=6
-#SBATCH --gres=gpu:v100:8
+#SBATCH --cpus-per-gpu=6
+#SBATCH --mem-per-gpu=90G
 #SBATCH --constraint=cpu_intel_platinum_8260
 #SBATCH --partition=batch
 #SBATCH --output=../results/%x/slurm-%j.out
