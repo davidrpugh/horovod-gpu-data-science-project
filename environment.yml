@@ -6,28 +6,21 @@ channels:
   - defaults
 
 dependencies:
-  - bokeh=1.4
-  - cmake=3.16
+  - cmake=3.17
   - cudnn=7.6
   - cupti=10.1
-  - cxx-compiler=1.0
-  - hvplot=0.5
-  - ipython-sql=0.3
-  - jupyterlab=1.2
-  - jupyterlab-git=0.9
-  - matplotlib=3.2
+  - cxx-compiler=1.1
+  - jupyterlab=2.2
   - mpi4py=3.0 # installs cuda-aware openmpi
-  - nbdime=1.1
   - nccl=2.5
-  - nodejs=13
+  - nodejs=14
   - nvcc_linux-64=10.1
-  - pandas=1.0
-  - pip=20.0
+  - pip=20.1
   - pip:
     - mxnet-cu101mkl==1.6.* # makes sure installed prior to horovod
     - -r file:requirements.txt
   - python=3.7
-  - pytorch=1.4
+  - pytorch=1.5
   - tensorboard=2.1
   - tensorflow-gpu=2.1
-  - torchvision=0.5  
+  - torchvision=0.6  
