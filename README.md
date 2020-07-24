@@ -59,7 +59,7 @@ following commands to source the `postBuild` script.
 
 ```bash
 conda activate $ENV_PREFIX # optional if environment already active
-. postBuild
+source postBuild
 ```
 
 For your convenience these commands have been combined in a shell script `./bin/create-conda-env.sh`. 
