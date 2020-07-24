@@ -1,9 +1,10 @@
 #!/bin/bash
 #SBATCH --time=2:00:00
-#SBATCH --mem=16G
-#SBATCH --cpus-per-task=6
-#SBATCH --gres=gpu:v100:1
+#SBATCH --gpus=1
+#SBATCH --cpus-per-gpu=6
+#SBATCH --mem-per-gpu=48G
 #SBATCH --constraint=cpu_intel_gold_6142|cpu_intel_platinum_8260
+#SBATCH --constraint=v100
 #SBATCH --partition=batch
 #SBATCH --job-name=create-conda-env
 #SBATCH --mail-type=ALL
