@@ -2,12 +2,7 @@
 
 Repository containing scaffolding for a Python 3-based data science project that uses 
 distributed, multi-gpu training with [Horovod](https://github.com/horovod/horovod) together 
-with one of [TensorFlow](https://www.tensorflow.org/), [PyTorch](https://pytorch.org/), or 
-[MXNET](https://mxnet.apache.org/). 
-
-## Creating a new project from this template
-
-Simply follow the [instructions](https://help.github.com/en/articles/creating-a-repository-from-a-template) to create a new project repository from this template.
+with [TensorFlow](https://www.tensorflow.org/) version 1.15. 
 
 ## Project organization
 
@@ -26,32 +21,10 @@ Project organization is based on ideas from [_Good Enough Practices for Scientif
 
 ## Installing NVIDIA CUDA Toolkit
 
-### Workstation
-
-You will need to have the [appropriate version](https://developer.nvidia.com/cuda-toolkit-archive) 
-of the NVIDIA CUDA Toolkit installed on your workstation. For this repo we are using 
-[NVIDIA CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-10.1-download-archive-update2) 
-[(documentation)](https://docs.nvidia.com/cuda/archive/10.1/).
-
-After installing the appropriate version of the NVIDIA CUDA Toolkit you will need to set the 
-following environment variables.
-
-```bash
-$ export CUDA_HOME=/usr/local/cuda-10.1
-$ export PATH=$CUDA_HOME/bin:$PATH
-$ export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
-```
-
-### Ibex
-
-Ibex users do not neet to install NVIDIA CUDA Toolkit as the relevant versions have already been 
-made available on Ibex by the Ibex Systems team. Users simply need to load the appropriate version 
-using the `module` tool. 
-
-```bash
-$ module load cuda/10.1.243
-```
-
+This branch uses the `cudatoolkit-dev=10.0=py36_0` package from [Conda Forge](https://conda-forge.org/) 
+to obtain a version of CUDA Toolkit that includes the NVIDIA CUDA Compiler (NVCC). This approach avoids 
+the need to manually install the NVIDIA CUDA Toolkit which typically requires root permissions.
+ 
 ## Building the Conda environment
 
 After adding any necessary dependencies that should be downloaded via `conda` to the 
@@ -61,8 +34,10 @@ directory by running the following commands.
 
 ```bash
 export ENV_PREFIX=$PWD/env
+export CUDA_HOME=$ENV_PREFIX
+export NCCL_HOME=$ENV_PREFIX
 export HOROVOD_CUDA_HOME=$CUDA_HOME
-export HOROVOD_NCCL_HOME=$ENV_PREFIX
+export HOROVOD_NCCL_HOME=$NCCL_HOME
 export HOROVOD_GPU_ALLREDUCE=NCCL
 export HOROVOD_GPU_BROADCAST=NCCL
 conda env create --prefix $ENV_PREFIX --file environment.yml --force
@@ -94,7 +69,7 @@ be run from the project root directory as follows.
 follows.
 
 ```bash
-./bin/create-conda-env.sh # assumes that $CUDA_HOME is set properly
+./bin/create-conda-env.sh
 ```
 
 ### Verifying the Conda environment
@@ -110,23 +85,23 @@ horovodrun --check-build
 You should see output similar to the following.
 
 ```
-Horovod v0.19.1:
+Horovod v0.19.5:
 
 Available Frameworks:
     [X] TensorFlow
-    [X] PyTorch
-    [X] MXNet
+    [ ] PyTorch
+    [ ] MXNet
 
 Available Controllers:
     [X] MPI
-    [X] Gloo
+    [ ] Gloo
 
 Available Tensor Operations:
     [X] NCCL
     [ ] DDL
     [ ] CCL
     [X] MPI
-    [X] Gloo  
+    [ ] Gloo  
 ```
 
 ### Listing the full contents of the Conda environment
@@ -145,7 +120,7 @@ after the environment has already been created, then you can re-create the envir
 following command.
 
 ```bash
-$ conda env create --prefix $ENV_PREFIX --file environment.yml --force
+$ ./bin/create-conda-env.sh
 ```
 
 ## Using Docker

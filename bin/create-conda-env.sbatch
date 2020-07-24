@@ -11,9 +11,7 @@
 #SBATCH --output=bin/%x-%j-slurm.out
 #SBATCH --error=bin/%x-%j-slurm.err
 
-# make sure NVCC is available
-module purge
-module load cuda/10.1.243
 
 # create the conda environment
+module purge
 ./bin/create-conda-env.sh

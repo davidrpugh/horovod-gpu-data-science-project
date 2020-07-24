@@ -6,21 +6,17 @@ channels:
   - defaults
 
 dependencies:
-  - cmake=3.17
+  - cudatoolkit-dev=10.0=py36_0
   - cudnn=7.6
-  - cupti=10.1
+  - cupti=10.0
   - cxx-compiler=1.1
   - jupyterlab=2.2
   - mpi4py=3.0 # installs cuda-aware openmpi
-  - nccl=2.5
+  - nccl=2.4
   - nodejs=14
-  - nvcc_linux-64=10.1
   - pip=20.1
   - pip:
-    - mxnet-cu101mkl==1.6.* # makes sure installed prior to horovod
     - -r file:requirements.txt
-  - python=3.7
-  - pytorch=1.5
-  - tensorboard=2.1
-  - tensorflow-gpu=2.1
-  - torchvision=0.6  
+  - python=3.6
+  - tensorboard=1.15
+  - tensorflow-gpu=1.15
