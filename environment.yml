@@ -1,7 +1,6 @@
 name: null
 
 channels:
-  - pytorch
   - conda-forge
   - defaults
 
