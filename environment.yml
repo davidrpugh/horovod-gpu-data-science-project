@@ -7,6 +7,7 @@ channels:
 
 dependencies:
   - cmake=3.17
+  - cudatoolkit=10.1
   - cudnn=7.6
   - cupti=10.1
   - cxx-compiler=1.1
@@ -17,10 +18,10 @@ dependencies:
   - nvcc_linux-64=10.1
   - pip=20.1
   - pip:
-    - mxnet-cu101mkl==1.6.* # makes sure installed prior to horovod
+    - mxnet-cu101mkl==1.6.* # makes sure frameworks are installed prior to horovod
+    - tensorflow-gpu==2.1.*
     - -r file:requirements.txt
   - python=3.7
   - pytorch=1.5
   - tensorboard=2.1
-  - tensorflow-gpu=2.1
   - torchvision=0.6  

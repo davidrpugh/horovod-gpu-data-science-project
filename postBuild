@@ -1,5 +1,3 @@
-#!/bin/bash
-
 jupyter labextension install --no-build jupyterlab-nvdashboard  # client-side component; server-side installed via conda/pip
 jupyter labextension install --no-build jupyterlab_tensorboard
 jupyter lab build
