@@ -1,5 +1,5 @@
-horovod==0.19.*
-jupyterlab-nvdashboard==0.3.* # server-side component; client-side component installed in postBuild
+horovod==0.20.*
+jupyterlab-nvdashboard==0.4.* # server-side component; client-side component installed in postBuild
 jupyter-tensorboard==0.2.*
 
 # make sure horovod is re-compiled if environment is re-built
