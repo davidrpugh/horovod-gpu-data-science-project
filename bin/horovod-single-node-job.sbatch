@@ -4,14 +4,14 @@
 #SBATCH --tasks-per-node=8
 #SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-gpu=6
-#SBATCH --mem-per-gpu=90G
+#SBATCH --mem=0
 #SBATCH --constraint=v100
 #SBATCH --constraint=cpu_intel_platinum_8260
 #SBATCH --partition=batch
 #SBATCH --output=../results/%x/slurm-%j.out
 #SBATCH --error=../results/%x/slurm-%j.err
 
-# Stops execution of script if any step return non-zro exit code
+# Stops execution of script if any step return non-zero exit code
 set -e
 
 # Need to define persistent storage for logging... 
@@ -57,7 +57,7 @@ horovodrun -np $SLURM_NTASKS python $TRAINING_SCRIPT \
     --read-checkpoints-from $PERSISTENT_CHECKPOINTS_DIR \
     --write-checkpoints-to  $LOCAL_CHECKPOINTS_DIR \
     --tensorboard-logging-dir $LOCAL_TENSORBOARD_DIR \
-    --batch-size 128 &
+    --batch-size 160 &
 HOROVODRUN_PID=$!
 
 # asynchronous rsync of training logs between local and persistent storage
