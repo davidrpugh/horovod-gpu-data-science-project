@@ -3,7 +3,6 @@
 #SBATCH --gpus=1
 #SBATCH --cpus-per-gpu=6
 #SBATCH --mem-per-gpu=48G
-#SBATCH --constraint=cpu_intel_gold_6142|cpu_intel_platinum_8260
 #SBATCH --constraint=v100
 #SBATCH --partition=batch
 #SBATCH --job-name=create-conda-env
