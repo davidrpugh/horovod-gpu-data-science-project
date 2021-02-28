@@ -1,12 +1,12 @@
 #!/bin/bash --login
-#SBATCH --time=24:00:00
-#SBATCH --gpus=8
-#SBATCH --tasks-per-node=8
+#SBATCH --time=2:00:00
+#SBATCH --gpus-per-node=2
+#SBATCH --tasks-per-node=2
 #SBATCH --gpus-per-task=1
 #SBATCH --cpus-per-gpu=6
-#SBATCH --mem=0
-#SBATCH --constraint=v100
-#SBATCH --constraint=cpu_intel_platinum_8260
+#SBATCH --mem-per-gpu=45G
+##SBATCH --constraint=v100
+##SBATCH --constraint=cpu_intel_platinum_8260
 #SBATCH --partition=batch
 #SBATCH --output=../results/%x/slurm-%j.out
 #SBATCH --error=../results/%x/slurm-%j.err
@@ -35,18 +35,13 @@ module purge
 module load cuda/10.1.243
 conda activate ../env
 
-# Start the nvidia-smi process in the background
-NVIDIA_SMI_DELAY_SECONDS=60
-nvidia-smi dmon --delay $NVIDIA_SMI_DELAY_SECONDS --options DT >> $PERSISTENT_LOGGING_DIR/nvidia-smi.log &
-NVIDIA_SMI_PID=$!
-
 # Start the nvdashboard server running in the background
 NVDASHBOARD_PORT=8000
 python -m jupyterlab_nvdashboard.server $NVDASHBOARD_PORT &
 NVDASHBOARD_PID=$!
 
 # Start the TensorBoard server running in the background
-TENSORBOARD_PORT=6006
+TENSORBOARD_PORT=0
 tensorboard --logdir $LOCAL_TENSORBOARD_DIR --port $TENSORBOARD_PORT --bind_all &
 TENSORBOARD_PID=$!
 
@@ -57,7 +52,7 @@ horovodrun -np $SLURM_NTASKS python $TRAINING_SCRIPT \
     --read-checkpoints-from $PERSISTENT_CHECKPOINTS_DIR \
     --write-checkpoints-to  $LOCAL_CHECKPOINTS_DIR \
     --tensorboard-logging-dir $LOCAL_TENSORBOARD_DIR \
-    --batch-size 160 &
+    --batch-size 64 &
 HOROVODRUN_PID=$!
 
 # asynchronous rsync of training logs between local and persistent storage
@@ -72,7 +67,7 @@ while [ "${HOROVODRUN_STATE}" != "" ]
 done
 
 # kill off the monitoring processes
-kill $NVIDIA_SMI_PID $NVDASHBOARD_PID $TENSORBOARD_PID
+kill $NVDASHBOARD_PID $TENSORBOARD_PID
 
 # make sure to get any new files written since last rsync 
 rsync -a $LOCAL_CHECKPOINTS_DIR/ $PERSISTENT_CHECKPOINTS_DIR
