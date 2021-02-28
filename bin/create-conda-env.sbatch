@@ -1,9 +1,8 @@
 #!/bin/bash
 #SBATCH --time=2:00:00
-#SBATCH --gpus=1
+#SBATCH --gpus-per-node=v100:1
 #SBATCH --cpus-per-gpu=6
-#SBATCH --mem-per-gpu=48G
-#SBATCH --constraint=v100
+#SBATCH --mem-per-gpu=64G
 #SBATCH --partition=batch
 #SBATCH --job-name=create-conda-env
 #SBATCH --mail-type=ALL
@@ -12,7 +11,7 @@
 
 # make sure NVCC is available
 module purge
-module load cuda/10.1.243
+module load cuda/11.0.1
 
 # create the conda environment
 ./bin/create-conda-env.sh

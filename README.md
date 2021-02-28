@@ -49,7 +49,7 @@ made available on Ibex by the Ibex Systems team. Users simply need to load the a
 using the `module` tool. 
 
 ```bash
-$ module load cuda/10.1.243
+$ module load cuda/11.0.1
 ```
 
 ## Building the Conda environment
@@ -63,8 +63,7 @@ directory by running the following commands.
 export ENV_PREFIX=$PWD/env
 export HOROVOD_CUDA_HOME=$CUDA_HOME
 export HOROVOD_NCCL_HOME=$ENV_PREFIX
-export HOROVOD_GPU_ALLREDUCE=NCCL
-export HOROVOD_GPU_BROADCAST=NCCL
+export HOROVOD_GPU_OPERATIONS=NCCL
 conda env create --prefix $ENV_PREFIX --file environment.yml --force
 ```
 
@@ -78,20 +77,8 @@ conda activate $ENV_PREFIX
 Note that the `ENV_PREFIX` directory is *not* under version control as it can always be re-created as 
 necessary.
 
-If you wish to use any JupyterLab extensions included in the `environment.yml` and `requirements.txt` 
-files then you need to activate the environment and rebuild the JupyterLab application using the 
-following commands to source the `postBuild` script.
-
-```bash
-conda activate $ENV_PREFIX # optional if environment already active
-. postBuild
-```
-
 For your convenience these commands have been combined in a shell script `./bin/create-conda-env.sh`. 
-Running the shell script will set the Horovod build variables correctly, create the Conda environment, 
-activate the Conda environment, and built JupyterLab with any additional extensions. The script should 
-be run from the project root directory as follows. 
-follows.
+The script should be run from the project root directory as follows. 
 
 ```bash
 ./bin/create-conda-env.sh # assumes that $CUDA_HOME is set properly
@@ -115,7 +102,7 @@ Horovod v0.19.1:
 Available Frameworks:
     [X] TensorFlow
     [X] PyTorch
-    [X] MXNet
+    [ ] MXNet
 
 Available Controllers:
     [X] MPI
