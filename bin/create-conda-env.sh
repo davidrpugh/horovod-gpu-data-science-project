@@ -1,5 +1,7 @@
 #!/bin/bash --login
 
+set -e
+
 # set relevant build variables for horovod
 export ENV_PREFIX=$PWD/env
 export CUDA_HOME=$ENV_PREFIX
