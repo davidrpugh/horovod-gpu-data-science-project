@@ -2,7 +2,7 @@
 #SBATCH --time=2:00:00
 #SBATCH --gpus-per-node=v100:1
 #SBATCH --cpus-per-gpu=6
-#SBATCH --mem-per-gpu=64G
+#SBATCH --mem=64G
 #SBATCH --partition=batch
 #SBATCH --job-name=create-conda-env
 #SBATCH --mail-type=ALL
