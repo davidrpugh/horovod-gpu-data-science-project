@@ -30,14 +30,14 @@ Project organization is based on ideas from [_Good Enough Practices for Scientif
 
 You will need to have the [appropriate version](https://developer.nvidia.com/cuda-toolkit-archive) 
 of the NVIDIA CUDA Toolkit installed on your workstation. For this repo we are using 
-[NVIDIA CUDA Toolkit 10.1](https://developer.nvidia.com/cuda-10.1-download-archive-update2) 
-[(documentation)](https://docs.nvidia.com/cuda/archive/10.1/).
+[NVIDIA CUDA Toolkit 11.0](https://developer.nvidia.com/cuda-11.0-update1-download-archive) 
+[(documentation)](https://docs.nvidia.com/cuda/archive/11.0/).
 
 After installing the appropriate version of the NVIDIA CUDA Toolkit you will need to set the 
 following environment variables.
 
 ```bash
-$ export CUDA_HOME=/usr/local/cuda-10.1
+$ export CUDA_HOME=/usr/local/cuda-11.0
 $ export PATH=$CUDA_HOME/bin:$PATH
 $ export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 ```
