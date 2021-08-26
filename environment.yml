@@ -19,7 +19,7 @@ dependencies:
   - pip
   - pip:
     - tensorflow-gpu==2.4.*
-    - -r file:requirements.txt
+    - -r requirements.txt
   - python=3.8
   - pytorch=1.7
   - tensorboard=2.4
