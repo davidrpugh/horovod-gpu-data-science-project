@@ -98,7 +98,7 @@ horovodrun --check-build
 You should see output similar to the following.
 
 ```
-Horovod v0.19.1:
+Horovod v0.21.3:
 
 Available Frameworks:
     [X] TensorFlow
