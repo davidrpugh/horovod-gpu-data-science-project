@@ -64,6 +64,7 @@ export ENV_PREFIX=$PWD/env
 export HOROVOD_CUDA_HOME=$CUDA_HOME
 export HOROVOD_NCCL_HOME=$ENV_PREFIX
 export HOROVOD_GPU_OPERATIONS=NCCL
+export HOROVOD_NCCL_LINK=SHARED
 conda env create --prefix $ENV_PREFIX --file environment.yml --force
 ```
 
