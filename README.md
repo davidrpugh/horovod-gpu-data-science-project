@@ -44,7 +44,7 @@ $ export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
 
 ### Ibex
 
-Ibex users do not neet to install NVIDIA CUDA Toolkit as the relevant versions have already been 
+Ibex users do not need to install NVIDIA CUDA Toolkit as the relevant versions have already been 
 made available on Ibex by the Ibex Systems team. Users simply need to load the appropriate version 
 using the `module` tool. 
 
